@@ -1,0 +1,140 @@
+# 🏥 ClinicDesk - نظام إدارة العيادة
+
+نظام متكامل لإدارة العيادات الطبية يشمل إدارة المستخدمين (مرضى، أطباء، إداريين)، حجز المواعيد، إدارة التخصصات، الوصفات الطبية، والتقارير.
+
+## 👥 المطورون
+
+| الاسم | الرقم الجامعي |
+|-------|----------------|
+| **نعيم رياض سالم** | 120222476 |
+| **محمود باسل الجعيدي** | 120230589 |
+
+## 🚀 التقنيات المستخدمة
+
+- **PHP** (بدون إطار عمل – بنية MVC يدوية)
+- **MySQL** (قاعدة البيانات)
+- **Bootstrap 5** + **AdminLTE 3** (واجهة المستخدم)
+- **jQuery** (بعض التفاعلات)
+- **Font Awesome** (الأيقونات)
+
+## 📁 هيكلية المشروع (الملفات الأساسية)
+clinicdesk/
+├── index.php # المدخل الرئيسي (Front Controller)
+├── .htaccess # إعادة كتابة المسارات
+├── README.md
+├── config/
+│ ├── config.php # الثوابت العامة (APP_NAME, BASE_URL, ...)
+│ └── database.php # إعدادات قاعدة البيانات والجلسات
+├── core/
+│ ├── Database.php # التعامل مع قاعدة البيانات (Singleton)
+│ ├── Auth.php # إدارة الجلسات والمصادقة
+│ ├── CSRF.php # حماية CSRF
+│ ├── Paginator.php # فئة التصفح بين الصفحات (pagination)
+│ └── helpers.php # دوال مساعدة (redirect, sanitize, format...)
+├── models/ # نماذج البيانات (لكل جدول)
+│ ├── BaseModel.php
+│ ├── UserModel.php
+│ ├── SpecializationModel.php
+│ ├── DoctorModel.php
+│ ├── AppointmentModel.php
+│ └── PrescriptionModel.php
+├── controllers/ # وحدات التحكم (المنطق)
+│ ├── AuthController.php
+│ ├── DashboardController.php
+│ ├── UserController.php
+│ ├── DoctorController.php
+│ ├── AppointmentController.php
+│ ├── PrescriptionController.php
+│ ├── ReportController.php
+│ ├── SpecializationController.php
+│ └── ProfileController.php
+├── views/ # ملفات العرض (HTML + PHP)
+│ ├── partials/
+│ │ ├── header.php
+│ │ ├── sidebar.php
+│ │ ├── footer.php
+│ │ └── alerts.php
+│ ├── auth/
+│ │ └── login.php
+│ ├── dashboard.php
+│ ├── appointments/
+│ ├── doctors/
+│ ├── prescriptions/
+│ ├── reports/
+│ ├── specializations/
+│ ├── users/
+│ ├── profile/
+│ └── errors/
+│ ├── 403.php
+│ └── 404.php
+├── public/
+│ └── uploads/ # الملفات المرفوعة (صور الأطباء، ملفات PDF)
+│ ├── avatars/
+│ ├── doctor_photos/
+│ └── prescriptions/
+└── sql/ # ملف تصدير قاعدة البيانات
+└── clinicdesk_db.sql
+
+
+## 🔧 متطلبات التشغيل
+
+- **خادم محلي**: XAMPP (أو WAMP/MAMP) مع PHP 7.4+
+- **قاعدة بيانات**: MySQL
+- **تمكين ملحقات PHP**: `mysqli`, `session`, `random`
+- **صلاحيات المجلدات**: تأكد من أن مجلد `public/uploads/` ومجلداته الفرعية قابلة للكتابة.
+
+## 🛠️ خطوات التثبيت والتشغيل
+
+1. انسخ مجلد `clinicdesk` إلى `C:\xampp2\htdocs\` (أو حسب تثبيت XAMPP).
+2. أنشئ قاعدة بيانات باسم `clinicdesk_db` في phpMyAdmin.
+3. استورد ملف `sql/clinicdesk_db.sql` (إذا كان متوفراً).  
+   > إذا لم يكن موجوداً، يمكنك إنشاء الجداول يدوياً باستخدام السكربتات الموجودة في ملفات `models/`.
+4. عدّل إعدادات الاتصال بقاعدة البيانات في `config/database.php` إذا لزم الأمر.
+5. تأكد من وجود ملف `config/config.php` غير فارغ (يحتوي على الثوابت العامة).
+6. شغّل Apache و MySQL من لوحة تحكم XAMPP.
+7. افتح الرابط: `http://localhost/clinicdesk/index.php?page=login`.
+
+## 🔐 بيانات الدخول التجريبية
+
+| الدور | البريد الإلكتروني | كلمة المرور |
+|-------|------------------|--------------|
+| مدير (Admin) | `admin@clinic.local` | `Admin@1234` |
+| طبيب (Doctor) | `ahmed@clinic.local` | `Admin@1234` |
+| مريض (Patient) | `sara@example.com` | `Admin@1234` |
+
+## ✨ الميزات والوظائف
+
+- **نظام أدوار متكامل** (Admin, Doctor, Patient) – كل دور يرى ما يناسبه.
+- **إدارة المستخدمين** (إضافة، تعديل، تعطيل، حذف) – للمدير فقط.
+- **إدارة الأطباء** (ربط بتخصص، تحديد أيام العمل، رفع صورة).
+- **إدارة التخصصات** (إضافة، تعديل، حذف مع التحقق من وجود أطباء مرتبطين).
+- **حجز المواعيد** للمرضى مع اختيار الطبيب والتاريخ والوقت، ومنع التعارض.
+- **تحديث حالة المواعيد** (تأكيد، إكمال، إلغاء) – للطبيب والمريض.
+- **الوصفات الطبية** (إضافة وصفة لكل موعد مكتمل، مع رفع ملف PDF، وعرضها وتحميلها حسب الصلاحية).
+- **لوحة تحكم مخصصة** حسب الدور (إحصائيات، مواعيد اليوم، روابط سريعة).
+- **تقارير المواعيد** مع فلاتر (التاريخ، الطبيب، الحالة) وتصدير CSV.
+- **حماية CSRF** في جميع النماذج.
+- **صفحات أخطاء مخصصة** (403، 404).
+- **تشفير كلمات المرور** باستخدام Bcrypt.
+
+## 🐛 ملاحظات حول الأخطاء التي تم حلها أثناء التطوير
+
+| الخطأ | السبب | الحل |
+|-------|-------|------|
+| `404 - Page Not Found` في صفحة التخصصات | عدم وجود `SpecializationController.php` | إنشاء الملف وإضافة المسار في `index.php` |
+| `Undefined variable $specializations` | عدم تمرير المتغير من الـ Controller إلى الـ View | تعديل الـ Controller لتمرير `$specializations` |
+| `Undefined variable $paginator` في المواعيد | استخدام `$paginator` في العرض دون التحقق من وجوده | إضافة شرط `isset()` قبل الاستخدام |
+| `Undefined constant "APP_URL"` | ملف `config/config.php` فارغ أو مفقود | إنشاء الملف وتعريف `APP_URL`, `BASE_URL` |
+| `Cannot declare class DoctorController` | تكرار تعريف الكلاس (ربما بسبب تضمين مزدوج) | تنظيف الملف والتأكد من تضمينه مرة واحدة |
+| شاشة بيضاء عند إضافة طبيب | عدم وجود ملف `views/doctors/create.php` | إنشاء الملف بالمحتوى الصحيح |
+| `Undefined variable $data` في `dashboard.php` | لم يتم تمرير `$data` من الـ Controller أو فشل الاستعلام | إضافة سطر احترازي `if (!isset($data)) $data = [];` |
+
+## 📝 الترخيص والملكية الفكرية
+
+تم تطوير هذا النظام للأغراض التعليمية، كجزء من متطلبات المساق الجامعي.  
+جميع الحقوق محفوظة للمطورين المذكورين أعلاه.
+
+---
+
+**آخر تحديث:** 2026-06-07  
+**إصدار المشروع:** 1.0 (مرحلة الاستقرار)
